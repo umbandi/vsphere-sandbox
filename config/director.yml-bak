@@ -1,25 +1,55 @@
 az-configuration:
-- name: AZ1
+- name: az1
+  iaas_configuration_name: default
   clusters:
   - cluster: Cluster
+    guid: a61ff0566c44d31fe6aa
+    host_group: null
     resource_pool: pas-az1
-  iaas_configuration_guid: 
-- name: AZ2
+  guid: b8bd7879eb2134be7de5
+- name: az2
+  iaas_configuration_name: default
   clusters:
   - cluster: Cluster
+    guid: a8228a48233a6a43be5e
+    host_group: null
     resource_pool: pas-az2
-  iaas_configuration_guid: 
-- name: AZ3
+  guid: e9f1e088ac09dbde6872
+- name: az3
+  iaas_configuration_name: default
   clusters:
   - cluster: Cluster
+    guid: 7d667453b1b87446e4c6
+    host_group: null
     resource_pool: pas-az3
-  iaas_configuration_guid: 
+  guid: 9dd816fc1594ce560770
+iaas-configurations:
+  additional_cloud_properties: {}
+  bosh_disk_path: pcf_disk
+  bosh_template_folder: pcf_templates
+  bosh_vm_folder: pcf_vms
+  datacenter: Datacenter
+  disk_type: thin
+  ephemeral_datastores_string: LUN01
+  guid: fa7e89c5ef5f72b16b8a
+  name: default
+  nsx_address: nsxmgr-01.haas-231.pez.pivotal.io
+  nsx_ca_certificate: ((nsx_ca_cert.certificate))
+  nsx_mode: nsx-t
+  nsx_networking_enabled: true
+  nsx_username: admin
+  nsx_password: ((nsx_password))
+  persistent_datastores_string: LUN01
+  ssl_verification_enabled: false
+  vcenter_host: vcsa-01.haas-231.pez.pivotal.io
+  vcenter_username: Administrator@vsphere.local
+  vcenter_password: ((vcenter_password))
 network-assignment:
   network:
     name: PAS-Infrastructure
   other_availability_zones: []
   singleton_availability_zone:
-    name: AZ1
+    name: az1
 networks-configuration:
   icmp_checks_enabled: false
   networks:
@@ -31,31 +61,31 @@ networks-configuration:
       gateway: 192.168.1.1
       reserved_ip_ranges: 192.168.1.1-192.168.1.10
       availability_zone_names:
-      - AZ1
-      - AZ2
-      - AZ3
+      - az1
+      - az2
+      - az3
   - name: PAS-Deployment
     subnets:
     - iaas_identifier: PAS-Deployment
       cidr: 192.168.2.0/24
-      dns: 10.192.2.10
+      dns: 192.168.1.10
       gateway: 192.168.2.1
-      reserved_ip_ranges: ""
+      reserved_ip_ranges: 192.168.2.1-192.168.2.10
       availability_zone_names:
-      - AZ1
-      - AZ2
-      - AZ3
+      - az1
+      - az2
+      - az3
   - name: PAS-Services
     subnets:
     - iaas_identifier: PAS-Services
       cidr: 192.168.3.0/24
-      dns: 10.192.2.10
+      dns: 192.168.1.10
       gateway: 192.168.3.1
-      reserved_ip_ranges: ""
+      reserved_ip_ranges: 192.168.3.1-192.168.3.10
       availability_zone_names:
-      - AZ1
-      - AZ2
-      - AZ3
+      - az1
+      - az2
+      - az3
 properties-configuration:
   director_configuration:
     allow_legacy_agents: true
@@ -72,10 +102,11 @@ properties-configuration:
     hm_pager_duty_options:
       enabled: false
     identification_tags: {}
+    job_configuration_on_tmpfs: false
     keep_unreachable_vms: false
     local_blobstore_options:
       tls_enabled: true
-    ntp_servers_string: time.svc.pivotal.io
+    ntp_servers_string: 10.192.2.10
     post_deploy_enabled: false
     resurrector_enabled: true
     retry_bosh_deploys: false
@@ -129,3 +160,4 @@ vmextensions-configuration:
         server_pools:
         - name: PAS-GoRouter443ServerPool
           port: 443
+
