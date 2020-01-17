@@ -1,1 +1,3 @@
-{"iaas": "vsphere", "vm_id":"/Datacenter/vm//pas-sandbox-om"}
+iaas: vsphere
+vm_id: /Datacenter/vm//pas-sandbox-om
+
