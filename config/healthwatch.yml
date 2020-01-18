@@ -1,0 +1,37 @@
+- name: staged-healthwatch-config
+  plan:
+    - aggregate:
+      - get: platform-automation-image
+        params:
+          unpack: true
+      - get: platform-automation-tasks
+        params:
+          unpack: true
+      - get: config
+    - *credhub-interpolate
+    - task: staged-config
+      image: platform-automation-image
+      file: platform-automation-tasks/tasks/staged-config.yml
+      input_mapping:
+        env: product-configs
+      params:
+        PRODUCT_NAME: p-healthwatch
+        ENV_FILE: env/env.yml
+    - task: make-commit
+      image: platform-automation-image
+      file: platform-automation-tasks/tasks/make-git-commit.yml
+      input_mapping:
+        repository: config
+        file-source: generated-config
+      output_mapping:
+        repository-commit: configuration-commit
+      params:
+        FILE_SOURCE_PATH: p-healthwatch.yml
+        FILE_DESTINATION_PATH: config/healthwatch.yml
+        GIT_AUTHOR_EMAIL: "pivotal-pipeline-bot@example.com"
+        GIT_AUTHOR_NAME: "Platform Automation Bot"
+        COMMIT_MESSAGE: 'Store healthwatch tile config'
+    - put: config
+      params:
+        repository: configuration-commit
+        merge: true
