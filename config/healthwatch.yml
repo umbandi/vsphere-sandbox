@@ -8,6 +8,7 @@
         params:
           unpack: true
       - get: config
+      - *credhub-interpolate
     - task: staged-config
       image: platform-automation-image
       file: platform-automation-tasks/tasks/staged-config.yml
